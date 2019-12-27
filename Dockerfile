@@ -48,3 +48,4 @@ ARG SOURCE_BRANCH=""
 ARG SOURCE_COMMIT=""
 RUN echo $(date +'%y%m%d_%H%M%S_%Z') ${SOURCE_BRANCH} ${SOURCE_COMMIT} > /build.txt
 SHELL ["/bin/bash", "-c"]
+RUN echo "export PATH=$PATH" > /etc/environment
