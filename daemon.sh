@@ -15,7 +15,7 @@ ccm start --root
 
 netstat -tpnl
 
-if [ "$DAEMON" == "true" ]; then
+if [ "$INFINITE_SLEEP" == "true" ]; then
   echo infinite sleep
   sleep infinity
 fi
