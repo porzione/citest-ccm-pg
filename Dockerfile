@@ -10,7 +10,8 @@ ARG JAVA_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download
 RUN curl -L $JAVA_URL -o /tmp/OpenJDK8.tar.gz \
     && tar xzf /tmp/OpenJDK8.tar.gz -C /opt \
     && echo "$JAVA_SUM /tmp/OpenJDK8.tar.gz" | sha256sum -c - 
-ENV PATH="/opt/jdk8u232-b09/bin:$PATH"
+ENV JAVA_HOME="/opt/jdk8u232-b09"
+ENV PATH="$JAVA_HOME/bin:$PATH"
 
 ### CCM (Cassandra Cluster Manager)
 
@@ -46,4 +47,4 @@ RUN rm /tmp/*.tar.gz \
 ARG SOURCE_BRANCH=""
 ARG SOURCE_COMMIT=""
 RUN echo $(date +'%y%m%d_%H%M%S_%Z') ${SOURCE_BRANCH} ${SOURCE_COMMIT} > /build.txt
-RUN echo 'export PATH=${PATH}' >> /root/.profile
+SHELL ["/bin/bash", "-c"]
