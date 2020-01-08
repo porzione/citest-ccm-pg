@@ -34,6 +34,10 @@ RUN test -d $PG_TMP || sudo -u postgres mkdir -p $PG_TMP \
     && echo sed -i -E "s/#?port = [[:digit:]]+/port = $PG_PORT/" $PG_CONF
 ADD pg_hba.conf /
 
+### redis
+
+RUN apt-get -y --no-install-recommends install redis-server
+
 ### daemon
 
 ADD daemon.sh /

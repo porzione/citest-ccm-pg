@@ -13,6 +13,9 @@ fi
 echo "* Start CCM"
 ccm start --root
 
+echo "* Start Redis"
+redis-server /etc/redis/redis.conf
+
 netstat -tpnl
 
 if [ "$INFINITE_SLEEP" == "true" ]; then
