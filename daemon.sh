@@ -16,6 +16,9 @@ ccm start --root
 echo "* Start Redis"
 redis-server /etc/redis/redis.conf
 
+echo "* Start RabbitMQ"
+/usr/sbin/rabbitmq-server -detached
+
 netstat -tpnl
 
 if [ "$INFINITE_SLEEP" == "true" ]; then
