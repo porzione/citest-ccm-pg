@@ -3,6 +3,14 @@ FROM porzione/citest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+### rabbitmq, erlang
+
+RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | apt-key add - \
+    && echo "deb https://dl.bintray.com/rabbitmq-erlang/debian stretch erlang-21.x" | tee /etc/apt/sources.list.d/rabbitmq.list  \
+    && echo "deb https://dl.bintray.com/rabbitmq/debian stretch main" | tee -a /etc/apt/sources.list.d/rabbitmq.list \
+    && apt-get update -y \
+    && apt-get install rabbitmq-server=3.8.3-1 -y --fix-missing
+
 ### java https://adoptopenjdk.net/installation.html#x64_linux-jdk
 
 ARG JAVA_SUM=7b7884f2eb2ba2d47f4c0bf3bb1a2a95b73a3a7734bd47ebf9798483a7bcc423
@@ -34,9 +42,10 @@ RUN test -d $PG_TMP || sudo -u postgres mkdir -p $PG_TMP \
     && echo sed -i -E "s/#?port = [[:digit:]]+/port = $PG_PORT/" $PG_CONF
 ADD pg_hba.conf /
 
-### redis and rabbitmq
+### redis
 
-RUN apt-get -y --no-install-recommends install redis-server rabbitmq-server
+RUN apt-get -y --no-install-recommends install redis-server
+
 
 ### daemon
 
@@ -45,10 +54,8 @@ CMD /daemon.sh
 
 ### cleanup
 
-RUN rm /tmp/*.tar.gz \
-    && rm -rf /usr/share/man \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/
+RUN rm -rf /tmp/*.tar.gz /usr/share/man /var/lib/apt/lists \
+    && apt-get clean
 
 ARG SOURCE_BRANCH=""
 ARG SOURCE_COMMIT=""
