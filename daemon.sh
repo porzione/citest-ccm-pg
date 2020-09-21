@@ -11,12 +11,19 @@ if [ "$PG_AUTH" != "trust" ] && [ -n "$PG_USER" ] && [ -n "$PG_PASS" ]; then
 fi
 
 echo "* Start CCM"
-ccm start --root
+if [ -n "$CORES" ]; then
+  ccm start --jvm_arg=-XX:ActiveProcessorCount=$CORES --root
+else
+  ccm start --root
+fi
 
 echo "* Start Redis"
 redis-server /etc/redis/redis.conf
 
 echo "* Start RabbitMQ"
+if [ -n "$CORES" ]; then
+  export RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS="+S $CORES:$CORES"
+fi
 /usr/sbin/rabbitmq-server -detached
 
 netstat -tpnl
