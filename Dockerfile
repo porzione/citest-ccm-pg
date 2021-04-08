@@ -13,8 +13,8 @@ RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/ra
 
 ### java https://adoptopenjdk.net/installation.html#x64_linux-jdk
 
-ARG JAVA_SUM=7b7884f2eb2ba2d47f4c0bf3bb1a2a95b73a3a7734bd47ebf9798483a7bcc423
-ARG JAVA_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jdk_x64_linux_hotspot_8u232b09.tar.gz 
+ARG JAVA_SUM=e6e6e0356649b9696fa5082cfcb0663d4bef159fc22d406e3a012e71fce83a5c
+ARG JAVA_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u282b08.tar.gz
 RUN curl -LfsSo /tmp/openjdk.tar.gz $JAVA_URL; \
     echo "$JAVA_SUM /tmp/openjdk.tar.gz" | sha256sum -c -; \
     mkdir -p /opt/java/openjdk; \
@@ -25,7 +25,7 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 
 ### CCM (Cassandra Cluster Manager)
 
-ARG CASSANDRA_VER=3.11.5
+ARG CASSANDRA_VER=3.11.10
 RUN ccm create --version $CASSANDRA_VER --nodes 3 test
 
 ### PostgreSQL
