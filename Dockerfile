@@ -6,10 +6,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 ### rabbitmq, erlang
 
 RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | apt-key add - \
-    && echo "deb https://dl.bintray.com/rabbitmq-erlang/debian stretch erlang-21.x" | tee /etc/apt/sources.list.d/rabbitmq.list  \
+    && echo "deb https://dl.bintray.com/rabbitmq-erlang/debian stretch erlang-23.x" | tee /etc/apt/sources.list.d/rabbitmq.list  \
     && echo "deb https://dl.bintray.com/rabbitmq/debian stretch main" | tee -a /etc/apt/sources.list.d/rabbitmq.list \
     && apt-get update -y \
-    && apt-get install rabbitmq-server=3.8.3-1 -y --fix-missing
+    && apt-get install rabbitmq-server=3.8.14-1 -y --fix-missing
 
 ### java https://adoptopenjdk.net/installation.html#x64_linux-jdk
 
@@ -45,7 +45,6 @@ ADD pg_hba.conf /
 ### redis
 
 RUN apt-get -y --no-install-recommends install redis-server
-
 
 ### daemon
 
