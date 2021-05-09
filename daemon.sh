@@ -32,3 +32,5 @@ if [ "$INFINITE_SLEEP" == "true" ]; then
   echo infinite sleep
   sleep infinity
 fi
+
+echo "* Exiting"
