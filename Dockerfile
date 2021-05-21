@@ -36,15 +36,18 @@ RUN true \
 ARG CASSANDRA_VER=3.11.10
 RUN ccm create --version $CASSANDRA_VER --nodes 3 test
 
-### PostgreSQL
+### PostgreSQL https://wiki.postgresql.org/wiki/Apt
 
-ENV PG_VER=11
+ENV PG_VER=12
 ENV PG_AUTH=trust
 ARG PG_CONF=/etc/postgresql/$PG_VER/main/postgresql.conf
 ARG PG_MAXCONN=500 
 ARG PG_PORT=5432
 
-RUN apt-get update && apt-get -y --no-install-recommends install postgresql-${PG_VER}
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list \
+    && apt-get -y update \
+    && apt-get -y install postgresql-${PG_VER}
 RUN test -d $PG_TMP || sudo -u postgres mkdir -p $PG_TMP \
     && echo "max_connections = $PG_MAXCONN" >> $PG_CONF \
     && echo sed -i -E "s/#?port = [[:digit:]]+/port = $PG_PORT/" $PG_CONF
