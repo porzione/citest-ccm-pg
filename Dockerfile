@@ -21,13 +21,15 @@ RUN cd /tmp ; \
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-### rabbitmq, erlang
+### rabbitmq, erlang https://rabbitmq.com/install-debian.html#supported-debian-distributions
 
-RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | apt-key add - \
-    && echo "deb https://dl.bintray.com/rabbitmq-erlang/debian stretch erlang-23.x" | tee /etc/apt/sources.list.d/rabbitmq.list  \
-    && echo "deb https://dl.bintray.com/rabbitmq/debian stretch main" | tee -a /etc/apt/sources.list.d/rabbitmq.list \
+RUN true \
+    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key | sudo apt-key add - \
+    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key | sudo apt-key add - \
+    && echo "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/debian buster main" | tee /etc/apt/sources.list.d/erlang.list \
+    && echo "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/deb/debian buster main" | tee /etc/apt/sources.list.d/rabbitmq.list \
     && apt-get update -y \
-    && apt-get install rabbitmq-server=3.8.14-1 -y --fix-missing
+    && apt-get install rabbitmq-server=3.8.16-1 -y --fix-missing
 
 ### CCM (Cassandra Cluster Manager)
 
