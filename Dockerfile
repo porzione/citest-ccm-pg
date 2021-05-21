@@ -3,6 +3,24 @@ FROM porzione/citest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+### java https://adoptopenjdk.net/installation.html#x64_linux-jdk
+
+ARG JAVA_TAR=OpenJDK8U-jdk_x64_linux_hotspot_8u292b10.tar.gz
+ARG JAVA_SUM=${JAVA_TAR}.sha256.txt
+ARG JAVA_BASE_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u292-b10
+ARG JAVA_URL=${JAVA_BASE_URL}/${JAVA_TAR}
+ARG JAVA_SUM_URL=${JAVA_BASE_URL}/${JAVA_SUM}
+RUN cd /tmp ; \
+    curl -LfsS $JAVA_SUM_URL -o $JAVA_SUM ; \
+    curl -LfsS $JAVA_URL -o $JAVA_TAR ; \
+    ls -l /tmp ; \  
+    sha256sum -c $JAVA_SUM ; \
+    mkdir -p /opt/java/openjdk ; \
+    cd /opt/java/openjdk ; \
+    tar -xf /tmp/$JAVA_TAR --strip-components=1
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
+
 ### rabbitmq, erlang
 
 RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc | apt-key add - \
@@ -10,18 +28,6 @@ RUN curl -fsSL https://github.com/rabbitmq/signing-keys/releases/download/2.0/ra
     && echo "deb https://dl.bintray.com/rabbitmq/debian stretch main" | tee -a /etc/apt/sources.list.d/rabbitmq.list \
     && apt-get update -y \
     && apt-get install rabbitmq-server=3.8.14-1 -y --fix-missing
-
-### java https://adoptopenjdk.net/installation.html#x64_linux-jdk
-
-ARG JAVA_SUM=e6e6e0356649b9696fa5082cfcb0663d4bef159fc22d406e3a012e71fce83a5c
-ARG JAVA_URL=https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u282b08.tar.gz
-RUN curl -LfsSo /tmp/openjdk.tar.gz $JAVA_URL; \
-    echo "$JAVA_SUM /tmp/openjdk.tar.gz" | sha256sum -c -; \
-    mkdir -p /opt/java/openjdk; \
-    cd /opt/java/openjdk; \
-    tar -xf /tmp/openjdk.tar.gz --strip-components=1
-ENV JAVA_HOME=/opt/java/openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
 
 ### CCM (Cassandra Cluster Manager)
 
