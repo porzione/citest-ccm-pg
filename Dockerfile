@@ -6,8 +6,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ### rabbitmq, erlang https://rabbitmq.com/install-debian.html#supported-debian-distributions
 
 RUN true \
-    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key | sudo apt-key add - \
-    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key | sudo apt-key add - \
+    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key | apt-key add - \
+    && curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key | apt-key add - \
     && echo "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/debian buster main" | tee /etc/apt/sources.list.d/erlang.list \
     && echo "deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/deb/debian buster main" | tee /etc/apt/sources.list.d/rabbitmq.list \
     && apt-get update -y \
